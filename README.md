@@ -10,18 +10,22 @@ The system combines search-based path planning (A / Hybrid A)**, Bézier-curve t
 
 The guidance and control pipeline is modular and structured as follows:
 
-Minefield Definition -> A* / Hybrid A* Path Planning -> Trajectory Smoothing (Bezier Curves) -> Nonlinear Path Following Controller (SIMULINK) -> USV Dynamics Simulation 
+1. Minefield Definition
+2. Initial Trajectory (A*/Hybrid A* Path Planning)
+3. Trajectory Smoothing (Bezier Curves)
+4. Nonlinear Path Following (Simulink)
+5. USV Dynamics Simulation 
 
-## Repository Structure
-MCM_v4.m
-    - astar_path_planning_v1.m
-    - HybridAstar_path_planning_v1_1.m
-    - analysis_v2_1.m
-    - MinefieldAndWaypointPlotter_v2_1.m
-
-Scenario_PTF_path_following_v1.slx
-
-plot_traversed_trajectory.m
+## Repository Structure    
+    ├── MCM_v4.m
+    │   ├── astar_path_planning_v1.m
+    │   ├── HybridAstar_path_planning_v1_1.m
+    │   ├── analysis_v2_1.m
+    │   └── MinefieldAndWaypointPlotter_v2_1.m
+    │
+    ├── Scenario_PTF_path_following_v1.slx
+    │
+    └── plot_traversed_trajectory.m
 
 ## How to Run
 1. Generate Trajectory
@@ -32,3 +36,41 @@ plot_traversed_trajectory.m
     * Tune controller gains if desired
 3. Visualize Results
    * run plot_traversed_trajector.m
+
+## File Descriptions
+### MCM_v4.m (Entry Point)
+* Primary script for scenario set up and trajectory generation
+* Initializes minefield, waypoints, and configures path planner
+* Outputs dynamically feasible trajectory to the MATLAB workspace
+
+#### Planner Selection
+    use_astar = true; 
+    use_hybridAStar = false;
+or
+
+    use_astar = false;
+    use_hybridAStar = true;
+
+#### Trajectory Smoothing
+      use_smoothing = true; (uses smoothing)
+      use_smoothing = false; (does not use smoothing)
+
+#### Bezier Curve Degree
+      n = 20 (default, change this value for a different degree of bezier curve)
+
+### Scenario_PTF_path_following_v1.slx
+* Simulink model implements:
+    * USV dynamics
+    * Nonlinear path following controller
+* Uses trajectory generated in MCM_v4.m
+* Controller gains are tunable for performance analysis
+
+### plot_traversed_trajectory.m
+* Post-processing and visualization
+* Compares planned trajectory and actual traversed trajectory
+* Overlays minefield  and waypoints 
+    
+
+
+
+
